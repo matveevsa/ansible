@@ -7,4 +7,17 @@
       apt: # имя модуля Ansible
         name: git
         state: present
+        
+    - name: Remove useless packages from the cache
+      tags: cache_update
+      become: yes
+      apt:
+        autoclean: yes
+        
+    - name: Update cache
+      tags: cache_update
+      become: yes
+      apt:
+        update_cache: yes
+      
       
