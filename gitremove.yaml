@@ -1,0 +1,9 @@
+# На какой группе серверов
+- hosts: webservers
+
+  tasks:
+    - name: uninstall git
+      become: yes
+      ansible.builtin.apt: # имя модуля Ansible
+        name: git
+        state: absent      

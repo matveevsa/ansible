@@ -1,0 +1,10 @@
+# На какой группе серверов
+- hosts: webservers
+
+  tasks:
+    - name: install git
+      become: yes
+      apt: # имя модуля Ansible
+        name: git
+        state: present
+      
