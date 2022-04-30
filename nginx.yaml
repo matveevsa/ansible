@@ -1,23 +1,27 @@
 - hosts: webservers
+
+  vars:
+    root_dir: /var/tmp/www
+    nginx_port: 80
+    
   tasks:
     - name: install nginx
       apt:
         name: nginx
         state: latest
       become: yes
+      
+    - name: Creates directory
+      file: path={{root_dir}} state=directory
 
     - name: update nginx config
-      ansible.builtin.copy:
-        src: files/nginx.conf
-        dest: /etc/nginx/nginx.conf
+      template: src=templates/nginx.conf.j2 dest={{root_dir}}/nginx.conf
       notify:
         - restart nginx
       become: yes
 
     - name: copy index.html
-      copy:
-        src: files/index.html
-        dest: /usr/share/nginx/html/index.html
+      copy: src=files/index.html dest={{root_dir}}/index.html
       become: yes
 
   handlers:
