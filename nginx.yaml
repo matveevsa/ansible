@@ -1,8 +1,4 @@
 - hosts: webservers
-
-  vars:
-    root_dir: /var/tmp/www
-    nginx_port: 80
     
   tasks:
     - name: install nginx
@@ -12,16 +8,16 @@
       become: yes
       
     - name: Creates directory
-      file: path={{root_dir}} state=directory
+      file: path={{root_dir}} state=directory mode=0755
 
     - name: update nginx config
-      template: src=templates/nginx.conf.j2 dest={{root_dir}}/nginx.conf
+      template: src=templates/nginx.conf.j2 dest={{nginx_conf_dir}}/nginx.conf
       notify:
         - restart nginx
       become: yes
 
     - name: copy index.html
-      copy: src=files/index.html dest={{root_dir}}/index.html
+      template: src=templates/index.html.j2 dest={{root_dir}}/index.html mode=0777
       become: yes
 
   handlers:
@@ -30,4 +26,3 @@
         name: nginx
         state: reloaded
       become: yes
-    

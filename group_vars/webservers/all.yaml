@@ -1,0 +1,4 @@
+root_dir: /var/tmp/www
+nginx_conf_dir: /etc/nginx
+nginx_port: 80
+server_name: webservers
