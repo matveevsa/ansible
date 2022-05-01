@@ -1,0 +1,21 @@
+- hosts: all
+  tasks:
+    - name: add users group
+      group:
+        name: wheel
+        state: present
+      become: yes
+        
+    - name: add test users
+      user:
+        name: "{{ item.name }}"
+        password: 123456
+        state: present
+        groups: "{{ item.groups }}"
+      loop: "{{ users }}"
+      become: yes
+      
+    - name: copy gitconfig
+      template: src=templates/.gitconfig.j2 dest=/home/{{ item.name }}/.gitconfig
+      loop: "{{ users }}"
+      become: yes

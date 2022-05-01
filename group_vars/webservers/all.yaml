@@ -2,3 +2,7 @@ root_dir: /var/tmp/www
 nginx_conf_dir: /etc/nginx
 nginx_port: 80
 server_name: webservers
+users:
+    - { name: jaime, groups: wheel }
+    - { name: sansa, groups: wheel }
+    - { name: robert, groups: wheel }

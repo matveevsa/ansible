@@ -6,4 +6,11 @@
       become: yes
       ansible.builtin.apt: # имя модуля Ansible
         name: git
-        state: absent      
+        state: absent
+       
+    - name: remove gitconfigs
+      file:
+        state: absent
+        path: "/home/{{ item.name }}/.gitconfig"
+      loop: "{{ users }}"
+      become: yes
