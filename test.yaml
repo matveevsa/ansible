@@ -1,0 +1,8 @@
+- hosts: all
+
+  tasks:
+    - debug: msg={{ ansible_os_family }}
+    
+    - name: show OS family
+      command: echo {{ ansible_os_family }}
+      when: ansible_os_family == "Debian"

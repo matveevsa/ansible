@@ -1,0 +1,53 @@
+# На какой группе серверов
+- hosts: webservers
+
+  tasks:
+    - name: Install NodeJs
+      import_role:
+        name: geerlingguy.nodejs
+      become: yes
+       
+    - name: Install PostgreSQL
+      import_role:
+        name: geerlingguy.postgresql
+      become: yes
+      
+    - name: Git clone [js-fastify-blog]
+      ansible.builtin.git:  
+        repo: 'https://github.com/hexlet-components/js-fastify-blog.git'
+        dest: '{{ root_dir }}'
+      become: yes
+      
+    - name: copy .env file
+      template: src=templates/.env.j2 dest={{ root_dir }}/.env mode=0777
+      become: yes
+            
+    - name: Create a new database with name "js-fastify-blog"
+      community.postgresql.postgresql_db:
+        name: js-fastify-blog
+      become_user: postgres
+      become: yes
+        
+    - name: Create user PostgreSQL
+      community.postgresql.postgresql_user:
+        db: js-fastify-blog
+        name: test
+        password: '{{db_pass}}'
+      become: yes
+      become_user: postgres
+
+    - name: GRANT ALL PRIVILEGES ON SCHEMA postgres
+      community.postgresql.postgresql_privs:
+        db: js-fastify-blog
+        roles: test
+        privs: ALL
+        type: database
+      become_user: postgres
+      become: yes
+        
+    - name: Install packages based on package.json.
+      npm:
+        path: '{{ root_dir }}'
+        unsafe_perm: yes
+      become: yes
+
